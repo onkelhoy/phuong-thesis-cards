@@ -1,36 +1,67 @@
 const cards = [
   {
-    title: "nflasf lf fljs dfljs dfkjsdf",
-    body: "Some body text",
-    type: "Some type"
+    title: "Who",
+    body: "is the design user?",
+    type: "user"
+  },
+  {
+    title: "Who",
+    body: "hello henry",
+    type: "user"
   }
 ]
 
 window.onload = () => {
-  const template = document.querySelector('template');
+  const backtemplate = document.querySelector('template.backside');
+  const fronttemplate = document.querySelector('template.frontside');
+  const frontcards = document.querySelector('div.cards.front');
+  const backcards = document.querySelector('div.cards.back');
 
-  buildOutline(template);
+  document.querySelector('select').addEventListener('change', (e) => {
+    console.log('change')
+    if (e.target.value === "front")
+    {
+      backcards.style.display = "none";
+      frontcards.style.display = "grid";
+    }
+    else 
+    {
+      frontcards.style.display = "none";
+      backcards.style.display = "grid";
+    }
+  })
+
+  buildOutline(backtemplate);
+  fronttemplate.content.querySelector('path[id=outline]').setAttribute('d', backtemplate.content.querySelector('path[id=outline]').getAttribute("d"));
 
   for (const card of cards)
   {
-    const clone = template.content.cloneNode(true);
-    clone.querySelector('textPath#title').textContent = card.title;
-    document.body.appendChild(clone);
+    const backclone = backtemplate.content.cloneNode(true);
+    const frontclone = fronttemplate.content.cloneNode(true);
+    // backclone.querySelector('textPath#title').textContent = card.title;
+
+    frontclone.querySelector('p.title').textContent = card.title;
+    frontclone.querySelector('p.body').textContent = card.body;
+    frontclone.querySelector('p.type').textContent = card.type;
+
+    backcards.appendChild(backclone);
+    frontcards.appendChild(frontclone);
   }
 }
 
 // remember that text will "hang" so textdistance should atleast be r + text height
-function buildOutline(template, r = 8, textdistance=15) 
+function buildOutline(template, r = 8, textdistance=8, scale=5) 
 {
   const points = [
-    {x:   0, y: 15},
-    {x:  20, y: 100},
-    {x:  80, y: 100},
-    {x: 100, y: 15},
-    {x:  50, y: 0}, // top 
+    {x: 2.5,  y: 15},
+    {x:  25,  y: 75},
+    {x:  75,  y: 75},
+    {x: 97.5, y: 15},
+    {x:  50,  y:  0}, // top 
   ];
+  const scaledpoints = points.map(p => ({x:p.x*scale, y:p.y*scale}));
   const cache = {};
-  const outline = getCurvedPath(points, r, cache);
+  const outline = getCurvedPath(scaledpoints, r*scale, cache);
 
   const center = points.reduce((p, c) => {
     p.x += c.x;
@@ -47,15 +78,15 @@ function buildOutline(template, r = 8, textdistance=15)
   {
     const angletocenter = Math.atan2(center.y - points[i].y, center.x - points[i].x)
     innerpoints.push({
-      x: points[i].x + Math.cos(angletocenter) * textdistance,
-      y: points[i].y + Math.sin(angletocenter) * textdistance + textdistance*0.2,
+      x: points[i].x + Math.cos(angletocenter) * (textdistance),
+      y: points[i].y + Math.sin(angletocenter) * (textdistance * 0.8)+ textdistance*0.1,
     });
   }
 
   const text = getCurvedPath(innerpoints, r);
 
-  template.content.querySelector('path[id=outline]').setAttribute('d', outline);
-  template.content.querySelector('path[id=text]').setAttribute('d', text);
+  template.content.querySelector('svg.outline path[id=outline]').setAttribute('d', outline);
+  template.content.querySelector('svg.text path[id=text]').setAttribute('d', text);
 }
 
 function getCurvedPath(points, r, cache = {})
