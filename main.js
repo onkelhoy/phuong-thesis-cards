@@ -1,14 +1,151 @@
 const cards = [
+  // intention
   {
     title: "Who",
-    body: "is the design user?",
-    type: "user"
+    question: "is the design user?",
+    target: "user",
+    category: "intention"
   },
   {
-    title: "Who",
-    body: "hello henry",
-    type: "user"
-  }
+    title: "Why",
+    question: "does design need to be made?",
+    target: "need(s)",
+    category: "intention"
+  },
+  {
+    title: "What",
+    question: "is the story of use for the design?",
+    target: "intimacy",
+    category: "intention"
+  },
+  {
+    title: "What",
+    question: "is needed knowledge for self-understanding of the project?",
+    target: "self-understanding",
+    category: "intention"
+  },
+  {
+    title: "What",
+    question: "is needed knowledge for self-understanding of the design solution?",
+    target: "self-understanding",
+    category: "intention"
+  },
+  {
+    title: "How",
+    question: "to develop and select ideas?",
+    target: "idea",
+    category: "intention"
+  },
+  // implementation
+  {
+    title: "What",
+    question: "aspect can increase the longevity of the design?",
+    target: "longevity",
+    category: "implementation"
+  },
+  {
+    title: "How",
+    question: "to reduce materials waste during design making?",
+    target: "waste",
+    category: "implementation"
+  },
+  {
+    title: "Which",
+    question: "information the users should know about the design?",
+    target: "transparency",
+    category: "implementation"
+  },
+  {
+    title: "Which",
+    question: "is the leading sustainable focus of the design?",
+    target: "sustainability",
+    category: "implementation"
+  },
+  {
+    title: "What",
+    question: "is the design purpose?",
+    target: "purpose",
+    category: "implementation"
+  },
+  {
+    title: "What",
+    question: "needs to be done before ideation?",
+    target: "ideation",
+    category: "implementation"
+  },
+  {
+    title: "How",
+    question: "can emotional attachment be brought to the design?",
+    target: "emotional attachment",
+    category: "implementation"
+  },
+  {
+    title: "Which",
+    question: "social context that the design is used for? ",
+    target: "society",
+    category: "implementation"
+  },
+  {
+    title: "Which",
+    question: "cultural context is the design based on?",
+    target: "culture",
+    category: "implementation"
+  },
+  {
+    title: "Is",
+    question: "the design considered eco-design? And why?",
+    target: "eco-design",
+    category: "implementation"
+  },
+  {
+    title: "Is",
+    question: "the design considered circular design? And why?",
+    target: "circular design",
+    category: "implementation"
+  },
+  {
+    title: "Efficiency",
+    question: "on which aspect? economy, society or environment?",
+    target: "efficiency",
+    category: "implementation"
+  },
+  // attainment
+  {
+    title: "Reduce-reuse-recycle",
+    question: "Has the design considered this aspect?",
+    target: "3R",
+    category: "attainment"
+  },
+  {
+    title: "May<br/>other living species",
+    question: "be effected by the design in production?",
+    target: "ecosystem",
+    category: "attainment"
+  },
+  {
+    title: "How",
+    question: "to bring up the inclusiveness in the design?",
+    target: "inclusive",
+    category: "attainment"
+  },
+  {
+    title: "How",
+    question: "to repair the design after usage?",
+    target: "take care",
+    category: "attainment"
+  },
+  {
+    title: "Where",
+    question: "are the limitations of the design project?",
+    target: "limitation",
+    category: "attainment"
+  },
+  {
+    title: "What",
+    question: "can do differently?",
+    target: "reflection and improvement",
+    category: "attainment"
+  },
 ]
 
 window.onload = () => {
@@ -34,30 +171,51 @@ window.onload = () => {
   buildOutline(backtemplate);
   fronttemplate.content.querySelector('path[id=outline]').setAttribute('d', backtemplate.content.querySelector('path[id=outline]').getAttribute("d"));
 
-  for (const card of cards)
+  let frow = null, brow = null;
+  for (let i=0; i<cards.length; i++)
   {
+    if (i % 5 === 0)
+    {
+      if (frow && brow)
+      {
+        backcards.appendChild(brow);
+        frontcards.appendChild(frow);
+      }
+
+      frow = document.createElement('div');
+      frow.className = "row";
+
+      brow = document.createElement('div');
+      brow.className = "row";
+    }
+    const card = cards[i];
     const backclone = backtemplate.content.cloneNode(true);
     const frontclone = fronttemplate.content.cloneNode(true);
     // backclone.querySelector('textPath#title').textContent = card.title;
 
-    frontclone.querySelector('p.title').textContent = card.title;
-    frontclone.querySelector('p.body').textContent = card.body;
-    frontclone.querySelector('p.type').textContent = card.type;
+    frontclone.querySelector('p.title').innerHTML = card.title;
+    frontclone.querySelector('p.question').innerHTML = card.question;
+    frontclone.querySelector('p.target').innerHTML = card.target;
 
-    backcards.appendChild(backclone);
-    frontcards.appendChild(frontclone);
+    backclone.querySelector('p.category').innerHTML = card.category;
+
+    brow.appendChild(backclone);
+    frow.appendChild(frontclone);
   }
+
+  backcards.appendChild(brow);
+  frontcards.appendChild(frow);
 }
 
 // remember that text will "hang" so textdistance should atleast be r + text height
-function buildOutline(template, r = 8, textdistance=8, scale=5) 
+function buildOutline(template, r = 8, textdistance=7, scale=1) 
 {
   const points = [
-    {x: 2.5,  y: 15},
-    {x:  25,  y: 75},
-    {x:  75,  y: 75},
-    {x: 97.5, y: 15},
-    {x:  50,  y:  0}, // top 
+    {x:   0,  y: 27.5},
+    {x:  24,  y: 87.5},
+    {x:  76,  y: 87.5},
+    {x: 100,  y: 27.5},
+    {x:  50,  y: 12.5}, // top 
   ];
   const scaledpoints = points.map(p => ({x:p.x*scale, y:p.y*scale}));
   const cache = {};
@@ -79,7 +237,7 @@ function buildOutline(template, r = 8, textdistance=8, scale=5)
     const angletocenter = Math.atan2(center.y - points[i].y, center.x - points[i].x)
     innerpoints.push({
       x: points[i].x + Math.cos(angletocenter) * (textdistance),
-      y: points[i].y + Math.sin(angletocenter) * (textdistance * 0.8)+ textdistance*0.1,
+      y: points[i].y + Math.sin(angletocenter) * (textdistance * 0.83),
     });
   }
 
