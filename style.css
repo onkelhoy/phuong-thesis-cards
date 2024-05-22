@@ -7,6 +7,10 @@ select {
 
 .cards.back {
   display: none;
+  padding-right: 0.5cm;
+}
+.cards.front {
+  padding-left: 0.4cm;
 }
 .cards .row {
   display: flex;

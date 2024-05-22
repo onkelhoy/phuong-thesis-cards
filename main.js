@@ -169,7 +169,7 @@ window.onload = () => {
   })
 
   buildOutline(backtemplate);
-  fronttemplate.content.querySelector('path[id=outline]').setAttribute('d', backtemplate.content.querySelector('path[id=outline]').getAttribute("d"));
+  // fronttemplate.content.querySelector('path[id=outline]').setAttribute('d', backtemplate.content.querySelector('path[id=outline]').getAttribute("d"));
 
   let frow = null, brow = null;
   for (let i=0; i<cards.length; i++)
