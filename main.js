@@ -45,7 +45,7 @@ const cards = [
   },
   {
     title: "How",
-    question: "to reduce materials waste during design making?",
+    question: "to reduce material waste during design making?",
     target: "waste",
     category: "implementation"
   },
@@ -118,7 +118,7 @@ const cards = [
   },
   {
     title: "May<br/>other living species",
-    question: "be effected by the design in production?",
+    question: "be affected by the design in production?",
     target: "ecosystem",
     category: "attainment"
   },
