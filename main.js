@@ -159,12 +159,12 @@ window.onload = () => {
     if (e.target.value === "front")
     {
       backcards.style.display = "none";
-      frontcards.style.display = "grid";
+      frontcards.style.display = "block";
     }
     else 
     {
       frontcards.style.display = "none";
-      backcards.style.display = "grid";
+      backcards.style.display = "block";
     }
   })
 
@@ -208,16 +208,16 @@ window.onload = () => {
 }
 
 // remember that text will "hang" so textdistance should atleast be r + text height
-function buildOutline(template, r = 8, textdistance=7, scale=1) 
+function buildOutline(template, r = 8, textdistance=9, scale=1) 
 {
   const points = [
-    {x:   0,  y: 27.5},
-    {x:  24,  y: 87.5},
-    {x:  76,  y: 87.5},
-    {x: 100,  y: 27.5},
-    {x:  50,  y: 12.5}, // top 
+    {x:   0,  y: 17, r: 11},
+    {x:  26.5,  y: 99},
+    {x:  73.5,  y: 99},
+    {x: 100,  y: 17, r: 11},
+    {x:  50,  y: -4, r: 11}, // top 
   ];
-  const scaledpoints = points.map(p => ({x:p.x*scale, y:p.y*scale}));
+  const scaledpoints = points.map(p => ({x:p.x*scale, y:p.y*scale, r: p.r*scale}));
   const cache = {};
   const outline = getCurvedPath(scaledpoints, r*scale, cache);
 
@@ -259,7 +259,9 @@ function getCurvedPath(points, r, cache = {})
     // const CP = getPointInfo(current, prev);
     // const CN = getPointInfo(current, next);
 
-    const info = arc(current, prev, next, r);
+    let radius = current.r || r;
+
+    const info = arc(current, prev, next, radius);
     cache[i] = info;
     
     if (i === 0)
@@ -269,11 +271,11 @@ function getCurvedPath(points, r, cache = {})
     else if (i !== points.length - 1)
     {
       curve += `L${info.a.x},${info.a.y} `
-      curve += `A${r},${r},0,0,0,${info.b.x},${info.b.y} `
+      curve += `A${radius},${radius},0,0,0,${info.b.x},${info.b.y} `
     }
     else {
       curve += `Q${current.x},${current.y},${cache[0].a.x},${cache[0].a.y}`
-      curve += `A${r},${r},0,0,0,${cache[0].b.x},${cache[0].b.y} `
+      curve += `A${radius},${radius},0,0,0,${cache[0].b.x},${cache[0].b.y} `
     }
   }
 
